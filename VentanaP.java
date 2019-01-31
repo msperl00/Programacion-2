@@ -3,11 +3,13 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -63,6 +65,7 @@ public class VentanaP extends JFrame {
 		// que ser el mismo que el
 		GridLayout nueva = new GridLayout(3, 1);
 		p.setLayout(nueva);
+		p.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 		nueva.setHgap(200);
 		nueva.setHgap(10);
 		// primercontenedor
@@ -121,6 +124,7 @@ public class VentanaP extends JFrame {
 
 				try {
 				p.add(new PanelJuegoEspañol());
+			
 				} catch (IllegalArgumentException e) {
 
 				}
@@ -133,8 +137,16 @@ public class VentanaP extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				p.add(new PanelJuegoFrances());
+				try {
+					System.out.println("JODER");
+					new PanelJuegoFrances();
+					p.add(nuevo);
+		
+					} catch (IllegalArgumentException e) {
+
+					}
 				setVisible(true);
+				dispose();
 
 			}
 
@@ -273,8 +285,9 @@ public class VentanaP extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(p,
 						"- Elección de dos de los juegos\n"
-								+ "-El primero es el juego que hicimos en la práctica pasada \n"
-								+ "-El segundo es el nuevo juego que nos piden \n",
+								+ "-El primero es el juego del solitario de saltos que hicimos en la práctica pasada \n"
+								+ "-El segundo es el nuevo juego de solitario clásico"
+								+ "-Dentro de cada juego, hay una explicación más detallada de la misma \n",
 						"Rules", JOptionPane.PLAIN_MESSAGE);
 			}
 
@@ -294,6 +307,7 @@ public class VentanaP extends JFrame {
 		this.setLocationRelativeTo(null); // Coloca la ventana en el centro
 		this.setVisible(false); // POrque podemos jugar a más de un solitario a la vez
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		
 		// this.setOpacity();
 		this.addWindowListener(new WindowAdapter() {
 			@Override

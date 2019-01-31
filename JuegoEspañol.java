@@ -21,13 +21,13 @@ public class JuegoEspañol {
 	private JPanel p1, p2;
 	private GridLayout grid;
 	private ArrayList<JButton> botones = new ArrayList<JButton>();
-	private Baraja baraja;
+	private BarajaEspanola baraja;
 	private JButton saca, bsoluciones;
 	private int contador;
-	private Carta reverso, carta;
-	private Iterator<Carta> it;
+	private CartaEspanola reverso, carta;
+	private Iterator<CartaEspanola> it;
 	private boolean empezar, sol;
-	private ArrayList<Stack<Carta>> colection = new ArrayList<Stack<Carta>>();
+	private ArrayList<Stack<CartaEspanola>> colection = new ArrayList<Stack<CartaEspanola>>();
 	private int numeroSol;
 	private static int ncartassacadas;
 	private BorderLayout b;
@@ -42,12 +42,12 @@ public class JuegoEspañol {
 		this.p2 = p2;
 
 		grid = new GridLayout(6, 8);
-		baraja = new Baraja();
+		baraja = new BarajaEspanola();
 		sol = false;
 		empezar = false;
 		contador = 0;
 		ncartassacadas = 0;
-		reverso = new Carta();
+		reverso = new CartaEspanola();
 		it = baraja.iterable();
 		cargaInicial();
 
@@ -182,8 +182,8 @@ public class JuegoEspañol {
 
 		for (int i = 0; i < baraja.numeroCartas; i++) {
 
-			Stack<Carta> pila1 = new Stack<Carta>();
-			Carta actual = baraja.baraja.get(i);
+			Stack<CartaEspanola> pila1 = new Stack<CartaEspanola>();
+			CartaEspanola actual = baraja.baraja.get(i);
 			pila1.push(actual);
 			colection.add(pila1);
 
@@ -196,7 +196,7 @@ public class JuegoEspañol {
 	private boolean compTresIzq(int actual) {
 		// TODO Auto-generated method stub
 		if (colection.size() > 3 && actual >= 3) {
-			return Carta.esPareja(colection.get(actual - 3).peek(), colection.get(actual).peek());
+			return CartaEspanola.esPareja(colection.get(actual - 3).peek(), colection.get(actual).peek());
 
 		}
 		return false;
@@ -205,7 +205,7 @@ public class JuegoEspañol {
 	private void TresIzq(int actual) {
 		System.out.println("Entra a ver si es pareja -3 ->" + colection.size() + "/" + actual);
 		// Muevo tanto en la colection, como en
-		Carta c = colection.get(actual).peek(); // Cojo la imagen
+		CartaEspanola c = colection.get(actual).peek(); // Cojo la imagen
 		colection.get(actual - 3).push(colection.get(actual).pop());
 		botones.get(actual - 3).setIcon(buscarImagen(c)); // Meto la imagen en el boton nuevo
 		p2.remove(botones.get(actual));
@@ -264,14 +264,14 @@ public class JuegoEspañol {
 		if (colection.size() >= 2 && actual >= 1) { // Nos pasan un valor que ya es el de 3
 			// posiciones atras
 
-			return Carta.esPareja(colection.get(actual - 1).peek(), colection.get(actual).peek()); // fallo
+			return CartaEspanola.esPareja(colection.get(actual - 1).peek(), colection.get(actual).peek()); // fallo
 		}
 		return false;
 	}
 
 	private void unaIzq(int actual) {
 		System.out.println("Entra a ver si es pareja -1 -> " + colection.size() + "/" + actual);
-		Carta c = colection.get(actual).peek(); // Cojo la imagen
+		CartaEspanola c = colection.get(actual).peek(); // Cojo la imagen
 		colection.get(actual - 1).push(colection.get(actual).pop()); // Apilo
 		botones.get(actual - 1).setIcon(buscarImagen(c)); // Meto la imagen en el boton nuevo
 		p2.remove(botones.get(actual));
@@ -287,7 +287,7 @@ public class JuegoEspañol {
 
 		if (it.hasNext()) {
 			setNCartasSacadas();
-			Carta tmp = it.next();
+			CartaEspanola tmp = it.next();
 			tmp.setImagenNueva(buscarImagen(tmp)); // La imagen ya la tiene la carta, así que se la meto a la primera
 													// posicion del
 			// boton
@@ -313,7 +313,7 @@ public class JuegoEspañol {
 		return ncartassacadas;
 	}
 
-	private ImageIcon buscarImagen(Carta tmp) {
+	private ImageIcon buscarImagen(CartaEspanola tmp) {
 		// TODO Auto-generated method stub
 		String name = tmp.toString();
 		System.out.println(tmp.toString());

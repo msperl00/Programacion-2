@@ -1,239 +1,248 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Stack;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+public class JuegoFrances {
 
-public class JuegoFrances extends JFrame {
+	private ArrayList<CartaFrancesa> visible;
+	private ArrayList<CartaFrancesa> tapada;
+	private ArrayList<ArrayList<CartaFrancesa>> colection;
+	private BarajaFrancesa miBaraja;
+
+	private Stack<CartaFrancesa> clubs;
+	private Stack<CartaFrancesa> diamons;
+	private Stack<CartaFrancesa> hearts;
+	private Stack<CartaFrancesa> spades;
+
+	public JuegoFrances() {
+
+		setVisible(new ArrayList<CartaFrancesa>());
+		setTapada(new ArrayList<CartaFrancesa>());
+		setColection(new ArrayList<ArrayList<CartaFrancesa>>());
+		setClubs(new Stack<CartaFrancesa>());
+		setDiamons(new Stack<CartaFrancesa>());
+		setHearts(new Stack<CartaFrancesa>());
+		setSpades(new Stack<CartaFrancesa>());
+		miBaraja = new BarajaFrancesa();
+
+		// for(int i = 0; i < BarajaFrancesa.numeroCartas; i++) {
+		// visible.add(miBaraja.baraja.get(i));
+		// }
+		jugar();
+
+	}
+
+	/* Para resolver el juego */
+	public JuegoFrances(BarajaFrancesa baraja) {
+		this.miBaraja.baraja.clear();
+		this.miBaraja.baraja = baraja.baraja;
+		jugar();
+	}
+
+	public void moverPila(int n, ArrayList<CartaFrancesa> pila) {
+
+		System.out.println(colection.size());
+		ArrayList<CartaFrancesa> aux = colection.get(n);
+		colection.get(n).clear();
+		colection.set(n, aux);
+
+	}
+
+	private void jugar() {
+
+		int i = 0;
+		System.out.println(miBaraja.baraja.size());
+		while (i < 28) {
+			// Metemos una carta en la primera pila, ya que es la de la descubierta
+			CartaFrancesa aux = miBaraja.baraja.get(i);
+			System.out.println(aux.toString());
+			ArrayList<CartaFrancesa> pila = new ArrayList<CartaFrancesa>();
+			if (i == 0) {
+				aux.setOculta(false);
+			} else if (i >= 1 && i <= 2) {
+				if (i == 1) {
+					aux.setOculta(true);
+				} else {
+					aux.setOculta(false);
+				}
+			} else if (i >= 3 && i <= 5) {
+				if (i == 5) {
+					aux.setOculta(false);
+
+				} else {
+					aux.setOculta(true);
+
+				}
+				pila.add(aux);
+			} else if (i >= 6 && i <= 9) {
+				if (i == 9) {
+					aux.setOculta(false);
+				} else {
+					aux.setOculta(true);
+
+				}
+			} else if (i > 9 && i < 15) {
+				if (i == 14) {
+					aux.setOculta(false);
+				} else {
+					aux.setOculta(true);
+				}
+			} else if (i >= 15 && i <= 20) {
+				if (i == 20) {
+					aux.setOculta(false);
+				} else {
+					aux.setOculta(true);
+				}
+			} else if (i >= 21 && i <= 27) {
+				if (i == 27) {
+					aux.setOculta(false);
+				} else {
+					aux.setOculta(true);
+				}
+			}
+			pila.add(aux);
+			i++;
+			colection.add(pila);
+		}
+		System.out.println(colection.toString());
+		CartaFrancesa aux = miBaraja.baraja.get(i);
+		aux.setOculta(false);
+		this.visible.add(aux);
+
+		System.out.println(visible.toString());
+		while (i < 52) {
+			CartaFrancesa aux1 = miBaraja.baraja.get(i);
+			aux.setOculta(true);
+			tapada.add(aux1);
+			i++;
+		}
+		System.out.println(tapada.toString());
+	}
 
 	/**
-	 * 
+	 * @return the tapada
 	 */
-	private static final long serialVersionUID = 1L;
-	private JPanel p;
-	private JPanel panel1;
-	private JPanel panel2;
-	private JMenuBar menu;
-	private JMenu archivo, editar, historial, ayuda;
-	public JMenuItem nuevo, cargar, salvarcomo, salir, salvar;
-	private static JMenuItem hacer;
-	public JMenuItem deshacer;
-	public JMenuItem resolver;
-	public JMenuItem ficheroestadisticas;
-	public JMenuItem estadisticas;
-	private String juego;
-
-	public JuegoFrances(String juego) {
-		// TODO Auto-generated constructor stub
-		this.juego = juego;
-		conf(juego);
+	public ArrayList<CartaFrancesa> getTapada() {
+		return tapada;
 	}
-	
-	private void conf(String juego1) {
-		// TODO Auto-generated method stub
-		this.setTitle(juego1);
-		this.setSize(1024, 768);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null); // Coloca la ventana en el centro
-		this.setVisible(false);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				int op = JOptionPane.showConfirmDialog(rootPane, "Seguro que quieres salir?");
-				if (JOptionPane.OK_OPTION == op) {
-					JOptionPane.showMessageDialog(rootPane, "Hasta luego!!!");
-					System.exit(0);
-				} else {
-					JOptionPane.showMessageDialog(rootPane, "Perfecto! Seguimos jugando");
 
-				}
-			}
-
-		});
-
-		p = new JPanel();
-		p.setVisible(true);
-		p.setBackground(Color.green);
-		p.setLayout(new BorderLayout());
-		this.setContentPane(p);
-
-		panel1 = new JPanel();
-		panel2 = new JPanel();
-
-		p.add(panel1, BorderLayout.WEST);
-		p.add(panel2, BorderLayout.CENTER);
-
-		menu();
-
-		panel2.setVisible(true);
-		panel1.setVisible(true);
-
-	
-	
-
-}
-
-		private void menu() {
-		// TODO Auto-generated method stub
-		menu = new JMenuBar();
-
-		archivo = new JMenu("Archivo");
-		archivo.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		nuevo = new JMenuItem("Nuevo");
-		nuevo.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				new JuegoFrances(juego);
-				dispose();
-			}
-		});
-		cargar = new JMenuItem("Cargar");
-		cargar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		salvar = new JMenuItem("Salvar");
-		salvar.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		salvarcomo = new JMenuItem("Salvar como");
-		salvarcomo.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-
-		salir = new JMenuItem("Salir");
-		salir.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.exit(0);
-			}
-		});
-
-		archivo.add(nuevo);
-		archivo.add(cargar);
-		archivo.add(salvar);
-		archivo.add(salvarcomo);
-		archivo.add(salir);
-		archivo.addSeparator();
-		menu.add(archivo);
-
-		editar = new JMenu("Editar");
-		deshacer = new JMenuItem("Deshacer");
-		deshacer.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		hacer = new JMenuItem("Hacer");
-		hacer.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				if(JuegoEspañol.getNCartasSacadas() < 40) {
-					
-				}
-			}
-		});
-		resolver = new JMenuItem("Resolver");
-		resolver.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		editar.add(deshacer);
-		editar.add(hacer);
-		editar.add(resolver);
-		editar.addSeparator();
-		menu.add(editar);
-
-		historial = new JMenu("Historial");
-		historial.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				abrir();
-			}
-
-			private void abrir() {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		estadisticas = new JMenuItem("Estadísticas");
-		ficheroestadisticas = new JMenuItem("Fichero estadísticas");
-
-		historial.add(estadisticas);
-		historial.add(ficheroestadisticas);
-		historial.addSeparator();
-		menu.add(historial);
-
-		ayuda = new JMenu("Ayuda");
-
-		JMenuItem rulesText = new JMenuItem("Explicación!");
-		ayuda.add(rulesText);
-		rulesText.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(p,
-						"- Juego del solitario de saltos \n" + "-" + "Tras sacar todas las cartas, mueve pares  \n"
-								+ "- Ya sean de palos, o de numeros\n" + "-Una posicion o tres a la izquierda \n"
-								+ "-Buena suerte\n" + "-",
-						"Rules", JOptionPane.PLAIN_MESSAGE);
-			}
-		});
-		menu.add(ayuda);
-
-		this.setJMenuBar(menu);
-
-		// Añado la barra al frame
-		menu.setVisible(true);
+	/**
+	 * @param tapada
+	 *            the tapada to set
+	 */
+	public void setTapada(ArrayList<CartaFrancesa> tapada) {
+		this.tapada = tapada;
 	}
+
+	/**
+	 * @return the colection
+	 */
+	public ArrayList<ArrayList<CartaFrancesa>> getColection() {
+		return colection;
+	}
+
+	/**
+	 * @param colection
+	 *            the colection to set
+	 */
+	public void setColection(ArrayList<ArrayList<CartaFrancesa>> colection) {
+		this.colection = colection;
+	}
+
+	/**
+	 * @return the visible
+	 */
+	public ArrayList<CartaFrancesa> getVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param baraja
+	 *            the baraja to set
+	 */
+	public void setVisible(ArrayList<CartaFrancesa> baraja) {
+		this.visible = baraja;
+	}
+
+	/**
+	 * @return the miBaraja
+	 */
+	public BarajaFrancesa getMiBaraja() {
+		return miBaraja;
+	}
+
+	/**
+	 * @param miBaraja
+	 *            the miBaraja to set
+	 */
+	public void setMiBaraja(BarajaFrancesa miBaraja) {
+		this.miBaraja = miBaraja;
+	}
+
+	/**
+	 * @return the clubs
+	 */
+	public Stack<CartaFrancesa> getClubs() {
+		return clubs;
+	}
+
+	/**
+	 * @param clubs
+	 *            the clubs to set
+	 */
+	public void setClubs(Stack<CartaFrancesa> clubs) {
+		this.clubs = clubs;
+	}
+
+	/**
+	 * @return the diamons
+	 */
+	public Stack<CartaFrancesa> getDiamons() {
+		return diamons;
+	}
+
+	/**
+	 * @param diamons
+	 *            the diamons to set
+	 */
+	public void setDiamons(Stack<CartaFrancesa> diamons) {
+		this.diamons = diamons;
+	}
+
+	/**
+	 * @return the hearts
+	 */
+	public Stack<CartaFrancesa> getHearts() {
+		return hearts;
+	}
+
+	/**
+	 * @param hearts
+	 *            the hearts to set
+	 */
+	public void setHearts(Stack<CartaFrancesa> hearts) {
+		this.hearts = hearts;
+	}
+
+	/**
+	 * @return the spades
+	 */
+	public Stack<CartaFrancesa> getSpades() {
+		return spades;
+	}
+
+	/**
+	 * @param spades
+	 *            the spades to set
+	 */
+	public void setSpades(Stack<CartaFrancesa> spades) {
+		this.spades = spades;
+	}
+
+	@Override
+	public String toString() {
+		return "Juego Clasico [baraja boca abajo=" + tapada.toString() + ", barajaVisible=" + visible.toString()
+				+ ", listaPilas=" + colection.toString() + ", Clubs=" + clubs.toString() + ", Diamonds="
+				+ diamons.toString() + ", Hearts=" + hearts.toString() + ", Spades=" + spades.toString() + "]";
+	}
+
 }

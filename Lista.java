@@ -8,12 +8,12 @@ import javax.swing.JButton;
 public class Lista {
 
 	private ArrayList<Stack<JButton>> botones;
-	private  ArrayList<Stack<Carta>> colection;
+	private  ArrayList<Stack<CartaEspanola>> colection;
 	private int contador;
 	
 	public Lista() {
 	this.setBotones( new ArrayList<Stack<JButton>>());
-	this.setColection(new ArrayList<Stack<Carta>>());
+	this.setColection(new ArrayList<Stack<CartaEspanola>>());
 	contador = 0;
 	}
 
@@ -25,11 +25,11 @@ public class Lista {
 		this.botones = botones;
 	}
 
-	public ArrayList<Stack<Carta>> getColection() {
+	public ArrayList<Stack<CartaEspanola>> getColection() {
 		return colection;
 	}
 
-	public void setColection(ArrayList<Stack<Carta>> colection) {
+	public void setColection(ArrayList<Stack<CartaEspanola>> colection) {
 		this.colection = colection;
 	}
 

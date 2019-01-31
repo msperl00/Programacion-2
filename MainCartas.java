@@ -11,9 +11,9 @@ public class MainCartas {
 				try {
 
 					VentanaP inicio = new VentanaP();
-
+					
 					inicio.setVisible(true);
-
+					new PanelJuegoFrances();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
